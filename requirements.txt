@@ -1,0 +1,12 @@
+langchain-community
+langchain-core
+langchain
+langchain-openai
+streamlit
+python-dotenv
+sqlalchemy
+pydantic
+chromadb
+pymysql
+cryptography
+openai
