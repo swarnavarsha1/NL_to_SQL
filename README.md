@@ -51,7 +51,6 @@ Run the Streamlit application:
     ```sh
     streamlit run main.py
 
-
 ## Configuration
 ### Database Connection
 
