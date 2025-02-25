@@ -18,22 +18,23 @@ This project is a Streamlit-based chatbot that converts natural language queries
 |-- table_selection.py    # Table selection using LLM-based extraction
 |-- prompts.py            # Templates for SQL query and response generation
 |-- .env                  # Environment variables
-
+```
 
 ## Installation
 
 1. Clone this repository:
    ```sh
-   git clone https://github.com/your-repo/nl2sql-chatbot.git
-   cd nl2sql-chatbot
+   git clone https://github.com/swarnavarsha1/NL_to_SQL.git
+   cd nl_to_sql
 
 2. Create a virtual environment and activate it
     ```sh 
     python -m venv venv
-    venv\Scripts\activate      # For Windows```
+    venv\Scripts\activate 
 
 3. Install dependencies:
-    ```pip install -r requirements.txt```
+    ```sh
+    pip install -r requirements.txt
 
 4. Set up environment variables:
 Create a .env file with the following:
@@ -44,10 +45,11 @@ Create a .env file with the following:
     db_name="database_name"
     OPENAI_API_KEY="api_key"
 
-## Usage:
+## Usage
 
 Run the Streamlit application:
-    ```streamlit run main.py
+    ```sh
+    streamlit run main.py
 
 
 ## Configuration
@@ -55,13 +57,15 @@ Run the Streamlit application:
 
 The application connects to a MySQL database using SQLAlchemy.
 The database credentials should be provided in the .env file.
+
 ### OpenAI API Key
 
 The chatbot uses OpenAI's GPT model for SQL generation.
 Provide your OpenAI API key in the .env file.
+
 ### How It Works
 
-Table Selection (table_selection.py): Identifies relevant database tables based on the user query.
-SQL Query Generation (langchain_utils.py): Uses GPT-4 to generate SQL queries based on the database schema.
-Query Execution (db_utils.py): Runs the generated SQL query against the database and retrieves results.
-Response Generation (langchain_utils.py): Formats the query results into a natural, conversational response.
+1. Table Selection (table_selection.py): Identifies relevant database tables based on the user query.
+2. SQL Query Generation (langchain_utils.py): Uses GPT-4 to generate SQL queries based on the database schema.
+3. Query Execution (db_utils.py): Runs the generated SQL query against the database and retrieves results.
+4. Response Generation (langchain_utils.py): Formats the query results into a natural, conversational response.
