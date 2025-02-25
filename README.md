@@ -11,6 +11,7 @@ This project is a Streamlit-based chatbot that converts natural language queries
 
 ## Project Structure
 
+```sh
 |-- main.py               # Streamlit app entry point
 |-- db_utils.py           # Database connection and schema retrieval
 |-- langchain_utils.py    # LangChain utilities for query generation and execution
