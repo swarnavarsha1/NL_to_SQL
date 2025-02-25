@@ -43,13 +43,13 @@ This project is a Streamlit-based chatbot that converts natural language queries
     db_password="password"
     db_host="localhost"
     db_name="database_name"
-    OPENAI_API_KEY="api_key"```
+    OPENAI_API_KEY="api_key"
 
 ## Usage
 
 Run the Streamlit application:
-```sh
-streamlit run main.py
+    ```sh
+    streamlit run main.py
 
 
 ## Configuration
