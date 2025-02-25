@@ -46,10 +46,10 @@ This project is a Streamlit-based chatbot that converts natural language queries
     OPENAI_API_KEY="api_key"
 
 ## Usage
-
 Run the Streamlit application:  
 ```bash
 streamlit run main.py
+```
 
 ## Configuration
 ### Database Connection
