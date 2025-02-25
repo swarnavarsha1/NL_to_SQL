@@ -47,9 +47,9 @@ This project is a Streamlit-based chatbot that converts natural language queries
 
 ## Usage
 
-Run the Streamlit application:
-    ```bash
-    streamlit run main.py
+Run the Streamlit application:  
+```bash
+streamlit run main.py
 
 ## Configuration
 ### Database Connection
