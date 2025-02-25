@@ -11,7 +11,7 @@ This project is a Streamlit-based chatbot that converts natural language queries
 
 ## Project Structure
 
-```sh
+```bash
 |-- main.py               # Streamlit app entry point
 |-- db_utils.py           # Database connection and schema retrieval
 |-- langchain_utils.py    # LangChain utilities for query generation and execution
@@ -23,21 +23,21 @@ This project is a Streamlit-based chatbot that converts natural language queries
 ## Installation
 
 1. Clone this repository:
-   ```sh
+   ```bash
    git clone https://github.com/swarnavarsha1/NL_to_SQL.git
    cd nl_to_sql
 
 2. Create a virtual environment and activate it
-    ```sh 
+    ```bash
     python -m venv venv
     venv\Scripts\activate 
 
 3. Install dependencies:
-    ```sh
+    ```bash
     pip install -r requirements.txt
 
 4. Set up environment variables:<br>
-    ```sh
+    ```bash
     Create a .env file with the following
     db_user="user_name"
     db_password="password"
@@ -48,7 +48,7 @@ This project is a Streamlit-based chatbot that converts natural language queries
 ## Usage
 
 Run the Streamlit application:
-    ```sh
+    ```bash
     streamlit run main.py
 
 ## Configuration
