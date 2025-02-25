@@ -37,7 +37,7 @@ This project is a Streamlit-based chatbot that converts natural language queries
     pip install -r requirements.txt
 
 4. Set up environment variables:<br>
-```sh
+    ```sh
     Create a .env file with the following
     db_user="user_name"
     db_password="password"
