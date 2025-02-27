@@ -46,7 +46,7 @@ Guidelines for response:
    - For single item descriptions, use concise paragraphs
    - For information about times, address, or policies, use short, clear sentences
    - Use 1-2 sentences of introduction before lists
-   - Keep descriptions brief but informative (2-3 sentences per item maximum)
+   - Keep descriptions concise (1-2 sentences per item maximum)
 
 3. For different types of content:
    - MENU ITEMS: Present as a bulleted list with item name in bold, followed by a brief description

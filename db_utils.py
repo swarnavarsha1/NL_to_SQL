@@ -76,12 +76,15 @@ def infer_table_purpose(table_name: str, columns: List[Dict], sample_data: List[
     has_location_columns = any(col in column_names for col in ["location", "address", "city", "state", "country"])
     has_time_columns = any(col in column_names for col in ["hour", "time", "schedule", "availability"])
     has_question_columns = any(col in column_names for col in ["question", "answer", "faq"])
+    has_recommendation_columns = any(col in column_names for col in ["popular", "recommended", "favorite", "rating", "best"])
     
     # Check table name for clues
     table_name_lower = table_name.lower()
     
     if "menu" in table_name_lower or "item" in table_name_lower or has_product_columns:
         return "Contains information about menu items, products, or offerings"
+    elif "recommendation" in table_name_lower or "popular" in table_name_lower or has_recommendation_columns:
+        return "Contains recommendations, popular items, or highly rated offerings"
     elif "user" in table_name_lower or "customer" in table_name_lower or has_user_columns:
         return "Contains information about users or customers"
     elif "order" in table_name_lower or "transaction" in table_name_lower or has_transaction_columns:

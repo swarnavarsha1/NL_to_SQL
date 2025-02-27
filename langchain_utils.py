@@ -65,7 +65,30 @@ def perform_fallback_query(db, question: str) -> Dict[str, Any]:
                             try:
                                 with engine.connect() as conn:
                                     result = conn.execute(text(query), {"search_term": f"%{term}%"})
-                                    results = [dict(row) for row in result]
+                                    
+                                    # More robust row-to-dict conversion
+                                    results = []
+                                    for row in result:
+                                        try:
+                                            # First try using _mapping attribute
+                                            if hasattr(row, '_mapping'):
+                                                row_dict = {str(k): v for k, v in row._mapping.items()}
+                                                results.append(row_dict)
+                                            else:
+                                                # Fallback to safer conversion method
+                                                row_dict = {}
+                                                for idx, col_name in enumerate(result.keys()):
+                                                    row_dict[str(col_name)] = row[idx]
+                                                results.append(row_dict)
+                                        except Exception as e:
+                                            logger.error(f"Error converting row to dict: {e}")
+                                            # Try one more conversion attempt
+                                            try:
+                                                row_dict = {str(k): str(v) for k, v in zip(result.keys(), row)}
+                                                results.append(row_dict)
+                                            except:
+                                                pass  # Skip this row if all conversion attempts fail
+                                    
                                     if results:
                                         if table_name not in fallback_results:
                                             fallback_results[table_name] = []
@@ -190,40 +213,41 @@ def get_chain():
             
         def generate_answer(inputs: dict) -> str:
             try:
-                # Check if we have fallback results that might be useful
-                if "fallback_results" in inputs and inputs["fallback_results"]:
-                    # Add the fallback results to the prompt
-                    fallback_info = "While we couldn't find exact matches, here are some potentially related items:\n"
-                    for table, rows in inputs["fallback_results"].items():
-                        fallback_info += f"\nFrom {table}:\n"
-                        for row in rows[:3]:  # Limit to 3 results per table
-                            fallback_info += f"- {row}\n"
+                # Check if results are empty
+                if "No matching records" in str(inputs["result"]) or not inputs.get("result"):
+                    # Extract key terms from the question for better fallback responses
+                    question_lower = inputs["question"].lower()
                     
-                    # Add fallback info to the result
-                    if "No matching records" in str(inputs["result"]):
-                        inputs["result"] = fallback_info
+                    # Check for common question patterns
+                    if any(term in question_lower for term in ["vegetarian", "vegan", "veg"]):
+                        if any(term in question_lower for term in ["biryani", "biriyani"]):
+                            return "We don't have vegetarian biryani available. Would you like to try our other vegetarian options instead?"
+                    
+                    # Generic not found handling with smarter suggestions
+                    item_terms = re.findall(r'\b(\w+(?:-\w+)?)\b', question_lower)
+                    item_terms = [term for term in item_terms if len(term) > 3 and term not in 
+                                ["what", "where", "when", "which", "your", "have", "tell", "list", "show", "do", "you", "any"]]
+                    
+                    if item_terms:
+                        main_term = item_terms[0]  # Use the first substantial term for suggestions
+                        return f"I couldn't find any matching information for '{main_term}'. Could you try asking about something similar or more specific?"
                     else:
-                        inputs["result"] += "\n\nAdditional potential matches:\n" + fallback_info
-                
-                if "No matching records found" in str(inputs["result"]) and not inputs.get("fallback_results"):
-                    # Suggest alternative phrasings based on the question
-                    question = inputs["question"].lower()
-                    suggestions = []
-                    
-                    if "time" in question or "hour" in question:
-                        suggestions.append("Try asking about specific meal times like 'What are your lunch hours?' or 'When is dinner served?'")
-                    
-                    if "menu" in question or "dish" in question or "food" in question or "item" in question:
-                        suggestions.append("Try asking about specific categories like 'What vegetarian dishes do you have?' or 'Do you have spicy items?'")
-                    
-                    if not suggestions:
-                        suggestions = ["Could you try rephrasing your question with more specific details?"]
-                    
-                    suggestion_text = " ".join(suggestions)
-                    return f"I couldn't find any matching information in the database. {suggestion_text}"
-                    
+                        return "I couldn't find any matching information. Could you try rephrasing your question with more specific details?"
+                        
+                # For successful results, keep response concise
                 prompt_value = answer_prompt.format(**inputs)
                 answer = llm.invoke(prompt_value).content.strip()
+                
+                # Trim excessive content (prevent long responses)
+                if len(answer.split()) > 100 and "•" in answer:
+                    # If it's a list response, limit to 3 bullet points max
+                    bullet_points = answer.split("•")
+                    intro = bullet_points[0]
+                    items = bullet_points[1:4]  # Take only first 3 items
+                    answer = intro + "•" + "•".join(items)
+                    if len(bullet_points) > 4:
+                        answer += "\n\nAdditional items are available. Would you like more information?"
+                        
                 return answer
             except Exception as e:
                 logger.error(f"Answer generation error: {e}")

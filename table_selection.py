@@ -31,6 +31,19 @@ def normalize_question(question: str) -> str:
     question = question.replace('-', ' ')
     # Replace multiple spaces with a single space
     question = re.sub(r'\s+', ' ', question)
+    
+    # Add recommendation keyword mapping
+    recommendation_keywords = ["good", "best", "recommend", "popular", "favorite", "suggestion"]
+    if any(keyword in question for keyword in recommendation_keywords):
+        question += " recommendation popular"
+    
+    # Add category keywords for common food-related queries
+    if "vegetarian" in question or "veg " in question:
+        question += " vegetarian dietary"
+        
+    if "non vegetarian" in question or "non veg" in question:
+        question += " non-vegetarian meat"
+    
     return question.strip()
 
 @st.cache_resource
